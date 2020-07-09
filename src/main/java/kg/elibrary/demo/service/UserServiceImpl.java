@@ -2,8 +2,8 @@ package kg.elibrary.demo.service;
 
 import kg.elibrary.demo.entity.User;
 import kg.elibrary.demo.entity.UserRole;
-import kg.elibrary.demo.model.UserAuthModel;
-import kg.elibrary.demo.model.UserCreateModel;
+import kg.elibrary.demo.model.LoginModel;
+import kg.elibrary.demo.model.RegistrationModel;
 import kg.elibrary.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -19,10 +20,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
+    private  UserService userService;
+    @Autowired
     private UserRoleService userRoleService;
 
     @Override
-    public User create(UserCreateModel userModel) {
+    public User create(User userModel) {
         User user = new User();
         String encodedPassword = passwordEncoder.encode(userModel.getPassword());
         user.setPassword(encodedPassword);
@@ -63,13 +66,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getToken(UserAuthModel userAuthModel) {
-        User user = getByLogin(userAuthModel.getLogin());
+    public String getToken(LoginModel loginModel) {
+        User user = getByLogin(loginModel.getLogin());
         if(user == null) return "Error";
-        String rawPassword = userAuthModel.getPassword();
+        String rawPassword = loginModel.getPassword();
         String encodedPassword = user.getPassword();
-        if (passwordEncoder.matches(rawPassword, encodedPassword)){
-            String loginPasswordPair = user.getLogin() + ":" + userAuthModel.getPassword();
+        if(passwordEncoder.matches(rawPassword, encodedPassword)){
+            String loginPasswordPair = user.getLogin() + ":" + loginModel.getPassword();
             String token = Base64.getEncoder().encodeToString(loginPasswordPair.getBytes());
             return "Basic " + token;
         }
@@ -79,5 +82,38 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByLogin(String login) {
         return userRepository.findByLogin(login).orElse(null);
+    }
+
+    @Override
+    public User createUserByAdmin(String name, RegistrationModel registrationModel) {
+        User user = new User();
+        User admin = userRepository.getByLogin(name);
+        String encodedPassword = passwordEncoder.encode(registrationModel.getPassword());
+        user.setPassword(encodedPassword);
+        user.setLogin(registrationModel.getLogin());
+        user.setStatus(1);
+        userRepository.save(user);
+
+        UserRole userRole = new UserRole();
+        userRole.setRoleName("ROLE_USER");
+        userRole.setUser(user);
+        userRoleService.create(userRole);
+        return user;
+    }
+
+    @Override
+    public User createUserAndUserRole(RegistrationModel registrationModel, Long id) {
+        Random rd = new Random();
+        User user = new User();
+        String encodedPassword = passwordEncoder.encode(registrationModel.getPassword());
+        user.setPassword(encodedPassword);
+        user.setLogin(registrationModel.getLogin());
+        userRepository.save(user);
+
+        UserRole userRole = new UserRole();
+        userRole.setRoleName("ROLE_ADMIN");
+        userRole.setUser(user);
+        userRoleService.create(userRole);
+        return user;
     }
 }

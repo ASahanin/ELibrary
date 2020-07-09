@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class UserRoleModel {
     private String roleName;
     private Long userId;
+    private  String email;
 }

@@ -6,8 +6,8 @@ import kg.elibrary.demo.model.UserRoleModel;
 import java.util.List;
 
 public interface UserRoleService {
-    List<UserRole> findAll();
     UserRole create(UserRole userRole);
-    UserRole create(UserRoleModel userRoleModel);
+    UserRole getById(Long id);
+    List<UserRole> getAll();
 }
 

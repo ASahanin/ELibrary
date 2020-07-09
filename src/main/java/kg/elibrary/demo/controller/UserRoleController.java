@@ -9,23 +9,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/test/user-role")
+@RequestMapping("/user/role")
 public class UserRoleController {
     @Autowired
     private UserRoleService userRoleService;
 
     @GetMapping
-    public List<UserRole> getAll(){
-        return userRoleService.findAll();
+    public List<UserRole> getAll() {
+        return userRoleService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public UserRole getById(@PathVariable Long id){
+        return userRoleService.getById(id);
     }
 
     @PostMapping
-    public UserRole create(@RequestBody UserRoleModel userRoleModel){
-        return userRoleService.create(userRoleModel);
-    }
-
-    @PostMapping("/old")
-    public UserRole create(@RequestBody UserRole userRole){
+    public UserRole create(@RequestBody UserRole userRole) {
         return userRoleService.create(userRole);
     }
 }

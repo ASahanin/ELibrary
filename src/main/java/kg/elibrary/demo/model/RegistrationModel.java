@@ -5,9 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class UserAuthModel {
+@AllArgsConstructor
+public class RegistrationModel {
     private String login;
     private String password;
+    private  String email;
 }

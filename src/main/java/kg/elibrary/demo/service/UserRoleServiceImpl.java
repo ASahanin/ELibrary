@@ -13,12 +13,6 @@ import java.util.List;
 public class UserRoleServiceImpl implements UserRoleService{
     @Autowired
     private UserRoleRepository userRoleRepository;
-    @Autowired
-    private UserService userService;
-    @Override
-    public List<UserRole> findAll() {
-        return userRoleRepository.findAll();
-    }
 
     @Override
     public UserRole create(UserRole userRole) {
@@ -26,12 +20,12 @@ public class UserRoleServiceImpl implements UserRoleService{
     }
 
     @Override
-    public UserRole create(UserRoleModel userRoleModel) {
-        User user = userService.getById(userRoleModel.getUserId());
-        if(user == null) return null;
-        UserRole userRole = new UserRole();
-        userRole.setRoleName(userRoleModel.getRoleName());
-        userRole.setUser(user);
-        return userRoleRepository.save(userRole);
+    public UserRole getById(Long id) {
+        return userRoleRepository.getOne(id);
+    }
+
+    @Override
+    public List<UserRole> getAll() {
+        return userRoleRepository.findAll();
     }
 }
