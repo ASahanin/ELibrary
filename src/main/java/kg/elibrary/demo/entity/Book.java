@@ -1,9 +1,12 @@
 package kg.elibrary.demo.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.FileReader;
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table (name = "book")
 public class  Book {
