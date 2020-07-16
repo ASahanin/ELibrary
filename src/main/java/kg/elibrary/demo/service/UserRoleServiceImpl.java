@@ -2,6 +2,7 @@ package kg.elibrary.demo.service;
 
 import kg.elibrary.demo.entity.User;
 import kg.elibrary.demo.entity.UserRole;
+import kg.elibrary.demo.model.ObjectNotFoundException;
 import kg.elibrary.demo.model.UserRoleModel;
 import kg.elibrary.demo.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,8 @@ public class UserRoleServiceImpl implements UserRoleService{
 
     @Override
     public UserRole getById(Long id) {
-        return userRoleRepository.getOne(id);
+        return userRoleRepository.findById(id)
+                .orElseThrow(()-> new ObjectNotFoundException("Couldn't find userRole with id " + id));
     }
 
     @Override

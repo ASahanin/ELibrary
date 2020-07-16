@@ -2,12 +2,17 @@ package kg.elibrary.demo.entity;
 
 
 
+import kg.elibrary.demo.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,6 +21,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends EntityBase {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "last_online")
     private LocalDate localDate;
     @Column(name = "login", nullable = false, unique = true)
@@ -24,11 +32,9 @@ public class User extends EntityBase {
     private String password;
     @Column(name = "email", nullable = false)
     private String email;
-    @ManyToMany
-    @JoinColumn(name = "service_types_id")
-    private List<ServiceTypes> serviceTypes;
-    @Column(name = "status", nullable = false)
-    private Integer status;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private UserRole userRole;
 
     @Override
     public String toString(){

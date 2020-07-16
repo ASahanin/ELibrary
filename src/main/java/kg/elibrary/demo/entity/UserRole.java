@@ -1,8 +1,10 @@
 package kg.elibrary.demo.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
@@ -11,10 +13,16 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRole extends EntityBase{
+@Builder
+public class UserRole extends EntityBase implements GrantedAuthority {
     @Column(name = "role_name", nullable = false)
     private String roleName;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @Override
+    public String getAuthority() {
+        return getRoleName();
+    }
 }

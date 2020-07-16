@@ -15,4 +15,6 @@ public interface UserService {
     User getByLogin(String login);
     User createUserByAdmin(String name, RegistrationModel registrationModel);
     User createUserAndUserRole(RegistrationModel registrationModel, Long id);
+    User update(User user);
+    User deleteById(Long id);
 }
