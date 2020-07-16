@@ -14,6 +14,6 @@ public interface BookService {
     Book read(Book book);
     Book edit(Book book);
     Book download(File file);
-    Book generateHTMLFromPDF(String filename) throws IOException, ParserConfigurationException;
+//    Book generateHTMLFromPDF(String filename);
 
 }

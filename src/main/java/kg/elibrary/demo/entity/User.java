@@ -36,8 +36,9 @@ public class User extends EntityBase {
     @JoinColumn(name = "role_id", nullable = false)
     private UserRole userRole;
 
-    @Override
-    public String toString(){
-        return this.login;
+    public User(String login, String password, String email) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
     }
 }
